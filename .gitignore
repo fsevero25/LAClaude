@@ -3,3 +3,18 @@ node_modules/
 .vinxi/
 dist/
 .wrangler/
+
+# Local env files — .env is intentionally included (dev only, per project briefing)
+.env.local
+.env.*.local
+
+# Editor
+.idea
+*.sw?
+
+# OS
+.DS_Store
+Thumbs.db
+
+# TypeScript
+*.tsbuildinfo
