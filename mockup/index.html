@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LACrm — Mockup</title>
+<style>
+:root {
+  --background: #0d0d0d;
+  --surface: #141414;
+  --surface-raised: #1a1a1a;
+  --sidebar: #0a0a0a;
+  --accent: #c8a96e;
+  --team-pb: #ca8a04;
+  --team-fln: #16a34a;
+  --success: #5cb87a;
+  --warning: #c89a3a;
+  --danger: #c85a5a;
+  --foreground: #f0f0f0;
+  --muted: #777;
+  --border: #222;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--background); color: var(--foreground); font-family: 'Inter', system-ui, sans-serif; font-size: 14px; }
+
+/* ── NAV TABS ─────────────────────────────── */
+#nav-tabs { display: flex; gap: 6px; padding: 16px 20px 0; background: var(--sidebar); border-bottom: 1px solid var(--border); }
+.tab { padding: 8px 18px; border-radius: 8px 8px 0 0; cursor: pointer; font-weight: 600; font-size: 12px; color: var(--muted); border: 1px solid transparent; border-bottom: none; background: transparent; transition: .15s; }
+.tab.active { background: var(--background); color: var(--foreground); border-color: var(--border); }
+.tab:hover:not(.active) { color: var(--foreground); }
+
+/* ── SHELL ────────────────────────────────── */
+#shell { display: flex; height: calc(100vh - 45px); }
+
+/* ── SIDEBAR ──────────────────────────────── */
+#sidebar { width: 220px; background: var(--sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px 0; flex-shrink: 0; }
+.logo-area { display: flex; align-items: center; gap: 10px; padding: 0 18px 20px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
+.logo-svg { width: 36px; height: 36px; background: var(--surface); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; color: #d4d4d4; letter-spacing: -1px; }
+.logo-text { font-size: 15px; font-weight: 700; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 18px; color: var(--muted); cursor: pointer; border-left: 2px solid transparent; font-size: 13px; transition: .1s; }
+.nav-item:hover { color: var(--foreground); background: var(--surface); }
+.nav-item.active { color: var(--foreground); border-left-color: var(--accent); background: var(--surface); }
+.nav-icon { font-size: 15px; width: 18px; text-align: center; }
+.sidebar-bottom { margin-top: auto; padding: 12px 18px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+.avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px; color: var(--background); }
+.user-name { font-size: 12px; font-weight: 600; }
+.user-role { font-size: 10px; color: var(--muted); }
+
+/* ── MAIN ─────────────────────────────────── */
+#main { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+.toolbar { display: flex; align-items: center; gap: 8px; padding: 12px 18px; border-bottom: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
+.toolbar h1 { font-size: 15px; font-weight: 700; flex: 1; }
+.btn { display: inline-flex; align-items: center; gap: 5px; padding: 6px 13px; border-radius: 7px; cursor: pointer; font-size: 12px; font-weight: 600; border: 1px solid var(--border); background: transparent; color: var(--muted); transition: .1s; }
+.btn:hover { color: var(--foreground); }
+.btn-primary { background: var(--foreground); color: var(--background); border-color: var(--foreground); }
+.btn-primary:hover { opacity: .88; }
+.btn-accent { color: var(--accent); border-color: var(--accent); }
+.filter-chip { padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; font-size: 11px; font-weight: 600; }
+.filter-chip.active { background: var(--foreground); color: var(--background); border-color: var(--foreground); }
+
+/* ── PAGES ────────────────────────────────── */
+.page { display: none; flex: 1; overflow: hidden; }
+.page.active { display: flex; flex-direction: column; flex: 1; }
+
+/* ── KANBAN ───────────────────────────────── */
+#kanban-board { flex: 1; overflow-x: auto; padding: 14px; display: flex; gap: 10px; align-items: flex-start; }
+.kanban-col { min-width: 220px; max-width: 220px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; display: flex; flex-direction: column; max-height: 100%; }
+.col-header { padding: 10px 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.col-dot { width: 8px; height: 8px; border-radius: 50%; }
+.col-name { font-size: 11px; font-weight: 700; flex: 1; }
+.col-count { font-size: 10px; color: var(--muted); background: var(--surface-raised); padding: 1px 6px; border-radius: 10px; }
+.col-cards { padding: 8px; display: flex; flex-direction: column; gap: 6px; overflow-y: auto; }
+.lead-card { background: var(--surface-raised); border: 1px solid var(--border); border-radius: 8px; padding: 10px 11px; cursor: pointer; transition: .1s; }
+.lead-card:hover { border-color: var(--accent); }
+.lead-name { font-size: 12px; font-weight: 600; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lead-phone { font-size: 11px; color: var(--muted); }
+.lead-tags { display: flex; gap: 5px; margin-top: 7px; flex-wrap: wrap; }
+.tag { font-size: 10px; padding: 2px 7px; border-radius: 4px; font-weight: 600; }
+.tag-frio { background: #1e3a5f; color: #7eb3f5; }
+.tag-morno { background: #3d2e00; color: #f5c542; }
+.tag-quente { background: #3d1010; color: #f57575; }
+.tag-pb { background: #3d2e00; color: var(--team-pb); }
+.tag-fln { background: #0d2e18; color: var(--team-fln); }
+.timer { font-size: 10px; color: var(--warning); margin-top: 4px; }
+.timer.ok { color: var(--muted); }
+
+/* ── PLANTÕES ─────────────────────────────── */
+.plantoes-body { flex: 1; overflow-y: auto; padding: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; }
+.card-header { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.card-title { font-size: 13px; font-weight: 700; }
+.card-body { padding: 14px 16px; }
+.team-badge { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 6px; }
+.team-pb-badge { background: #3d2e00; color: var(--team-pb); }
+.team-fln-badge { background: #0d2e18; color: var(--team-fln); }
+.shift-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--border); }
+.shift-row:last-child { border-bottom: none; }
+.shift-date { font-size: 11px; color: var(--muted); width: 80px; flex-shrink: 0; }
+.shift-name { font-size: 12px; font-weight: 600; flex: 1; }
+.shift-time { font-size: 11px; color: var(--muted); }
+.slot-badge { font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 4px; background: var(--accent); color: var(--background); }
+.upload-area { border: 2px dashed var(--border); border-radius: 8px; padding: 24px; text-align: center; color: var(--muted); cursor: pointer; transition: .15s; }
+.upload-area:hover { border-color: var(--accent); color: var(--foreground); }
+.review-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.review-table th { text-align: left; padding: 6px 10px; color: var(--muted); border-bottom: 1px solid var(--border); font-size: 11px; }
+.review-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); }
+.review-row-amber { background: rgba(202,138,4,.08); }
+.review-row-amber td:first-child { border-left: 2px solid var(--warning); }
+.select-amber { background: var(--surface-raised); border: 1px solid var(--warning); border-radius: 5px; color: var(--warning); padding: 3px 6px; font-size: 11px; }
+.unmatched-banner { background: rgba(202,138,4,.1); border: 1px solid rgba(202,138,4,.3); border-radius: 8px; padding: 8px 14px; font-size: 12px; color: var(--warning); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+
+/* ── RELATÓRIOS ───────────────────────────── */
+.relatorios-body { flex: 1; overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 16px; }
+.week-tabs { display: flex; gap: 6px; }
+.week-tab { padding: 5px 14px; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 600; }
+.week-tab.active { background: var(--surface-raised); color: var(--foreground); border-color: var(--accent); }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 9px; padding: 16px; }
+.stat-value { font-size: 28px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+.stat-label { font-size: 11px; color: var(--muted); }
+.funnel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+.funnel-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.funnel-label { font-size: 11px; color: var(--muted); width: 140px; flex-shrink: 0; }
+.funnel-bar-wrap { flex: 1; height: 22px; background: var(--surface-raised); border-radius: 4px; overflow: hidden; }
+.funnel-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; }
+.funnel-count { font-size: 12px; color: var(--muted); width: 30px; text-align: right; }
+
+/* ── CORRETORES ───────────────────────────── */
+.corretores-body { flex: 1; overflow-y: auto; padding: 18px; }
+.corretor-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.corretor-table th { text-align: left; padding: 8px 14px; color: var(--muted); border-bottom: 1px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; }
+.corretor-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+.corretor-table tr:hover td { background: var(--surface); }
+.role-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 5px; }
+.role-admin { background: #2e1a3d; color: #c78fff; }
+.role-corretor { background: var(--surface-raised); color: var(--muted); }
+.role-gestor { background: #1a2e3d; color: #7ec8f5; }
+.status-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+.dot-active { background: var(--success); }
+.dot-inactive { background: var(--muted); }
+
+/* ── CONFIGURAÇÕES ───────────────────────── */
+.config-body { flex: 1; overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 16px; max-width: 680px; }
+.config-section { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; }
+.config-section-header { padding: 13px 18px; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 700; }
+.config-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 18px; border-bottom: 1px solid var(--border); }
+.config-row:last-child { border-bottom: none; }
+.config-label { font-size: 13px; }
+.config-desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.toggle { width: 40px; height: 22px; border-radius: 11px; background: var(--success); position: relative; cursor: pointer; }
+.toggle-off { background: var(--border); }
+.toggle::after { content: ''; position: absolute; width: 16px; height: 16px; background: white; border-radius: 50%; top: 3px; right: 3px; transition: .2s; }
+.toggle-off::after { right: auto; left: 3px; }
+.input-field { background: var(--surface-raised); border: 1px solid var(--border); border-radius: 7px; padding: 6px 10px; color: var(--foreground); font-size: 12px; width: 260px; }
+
+/* ── LEAD DRAWER ──────────────────────────── */
+#lead-drawer { position: fixed; right: -420px; top: 45px; bottom: 0; width: 420px; background: var(--surface); border-left: 1px solid var(--border); transition: right .25s; display: flex; flex-direction: column; z-index: 100; }
+#lead-drawer.open { right: 0; }
+.drawer-header { padding: 16px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 10px; }
+.drawer-title { font-size: 16px; font-weight: 700; flex: 1; }
+.close-btn { cursor: pointer; color: var(--muted); font-size: 18px; line-height: 1; background: none; border: none; padding: 0; }
+.close-btn:hover { color: var(--foreground); }
+.drawer-body { flex: 1; overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+.field-group label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+.field-value { font-size: 13px; }
+.status-select { background: var(--surface-raised); border: 1px solid var(--border); border-radius: 7px; padding: 7px 10px; color: var(--foreground); font-size: 13px; width: 100%; cursor: pointer; }
+.history-item { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.history-item:last-child { border-bottom: none; }
+.history-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+.history-text { font-size: 12px; }
+.history-time { font-size: 10px; color: var(--muted); margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<!-- SCREEN NAV -->
+<div id="nav-tabs">
+  <div class="tab active" onclick="showPage('login')">🔐 Login</div>
+  <div class="tab" onclick="showPage('pipeline')">📊 Pipeline</div>
+  <div class="tab" onclick="showPage('plantoes')">📅 Plantões</div>
+  <div class="tab" onclick="showPage('plantoes-review')">📄 Plantões — Revisão PDF</div>
+  <div class="tab" onclick="showPage('relatorios')">📈 Relatórios</div>
+  <div class="tab" onclick="showPage('corretores')">👥 Corretores</div>
+  <div class="tab" onclick="showPage('configuracoes')">⚙️ Config</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     LOGIN
+══════════════════════════════════════════ -->
+<div id="page-login" class="page active" style="align-items:center;justify-content:center;background:var(--background);">
+  <div style="width:360px;padding:2.5rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;">
+    <div style="text-align:center;margin-bottom:2rem;">
+      <div style="width:56px;height:56px;background:var(--surface-raised);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:20px;font-weight:700;color:#d4d4d4;letter-spacing:-1px;">LA</div>
+      <div style="font-size:1.4rem;font-weight:700;">LACrm</div>
+      <div style="color:var(--muted);font-size:12px;margin-top:4px;">Luiz Althoff Soluções em Imóveis</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:5px;">Email</label>
+        <input class="input-field" type="email" value="corretor@la.com.br" style="width:100%;" />
+      </div>
+      <div>
+        <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:5px;">Senha</label>
+        <input class="input-field" type="password" value="••••••••" style="width:100%;" />
+      </div>
+      <button class="btn btn-primary" style="width:100%;padding:9px;justify-content:center;font-size:13px;cursor:pointer;" onclick="showPage('pipeline')">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SHELL (sidebar + main) — wraps pipeline/plantões/relatorios/corretores/config
+══════════════════════════════════════════ -->
+
+<!-- PIPELINE -->
+<div id="page-pipeline" class="page" style="flex-direction:row;">
+  <!-- Sidebar -->
+  <div id="sidebar">
+    <div class="logo-area">
+      <div class="logo-svg">LA</div>
+      <div>
+        <div class="logo-text">LACrm</div>
+        <div style="font-size:10px;color:var(--muted);">Luiz Althoff</div>
+      </div>
+    </div>
+    <div class="nav-item active"><span class="nav-icon">⬡</span> Pipeline</div>
+    <div class="nav-item" onclick="showPage('plantoes')"><span class="nav-icon">📅</span> Plantões</div>
+    <div class="nav-item" onclick="showPage('relatorios')"><span class="nav-icon">📈</span> Relatórios</div>
+    <div class="nav-item" onclick="showPage('corretores')"><span class="nav-icon">👥</span> Corretores</div>
+    <div class="nav-item" onclick="showPage('configuracoes')"><span class="nav-icon">⚙️</span> Configurações</div>
+    <div class="sidebar-bottom">
+      <div class="avatar">FS</div>
+      <div>
+        <div class="user-name">Fernando S.</div>
+        <div class="user-role">Admin</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div id="main">
+    <div class="toolbar">
+      <h1>Pipeline</h1>
+      <span style="font-size:11px;color:var(--muted);margin-right:4px;">Equipe:</span>
+      <div class="filter-chip active">Todos</div>
+      <div class="filter-chip" style="color:var(--team-pb);border-color:var(--team-pb);">PB</div>
+      <div class="filter-chip" style="color:var(--team-fln);border-color:var(--team-fln);">FLN</div>
+      <div style="flex:1"></div>
+      <button class="btn">↻ Atualizar</button>
+      <button class="btn btn-accent">🤖 Assistente</button>
+      <button class="btn btn-primary" onclick="openDrawer()">＋ Novo Lead</button>
+    </div>
+
+    <div id="kanban-board">
+
+      <!-- Col: Aguardando -->
+      <div class="kanban-col">
+        <div class="col-header">
+          <div class="col-dot" style="background:var(--warning);"></div>
+          <div class="col-name">Aguardando Atendimento</div>
+          <div class="col-count">3</div>
+        </div>
+        <div class="col-cards">
+          <div class="lead-card" onclick="openDrawer()">
+            <div class="lead-name">Mariana Oliveira</div>
+            <div class="lead-phone">📞 (48) 99821-3344</div>
+            <div class="lead-tags">
+              <span class="tag tag-quente">🔥 Quente</span>
+              <span class="tag tag-pb">PB</span>
+            </div>
+            <div class="timer">⏱ 23min — vence em 7min</div>
+          </div>
+          <div class="lead-card">
+            <div class="lead-name">Rafael Duarte</div>
+            <div class="lead-phone">📞 (48) 99612-7788</div>
+            <div class="lead-tags">
+              <span class="tag tag-morno">~ Morno</span>
+              <span class="tag tag-fln">FLN</span>
+            </div>
+            <div class="timer ok">⏱ 8min</div>
+          </div>
+          <div class="lead-card">
+            <div class="lead-name">Juliana Matos</div>
+            <div class="lead-phone">📞 (48) 98844-5566</div>
+            <div class="lead-tags">
+              <span class="tag tag-frio">❄ Frio</span>
+              <span class="tag tag-pb">PB</span>
+            </div>
+            <div class="timer ok">⏱ 2min</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Col: 1ª Chamada -->
+      <div class="kanban-col">
+        <div class="col-header">
+          <div class="col-dot" style="background:var(--accent);"></div>
+          <div class="col-name">1ª Chamada</div>
+          <div class="col-count">5</div>
+        </div>
+        <div class="col-cards">
+          <div class="lead-card">
+            <div class="lead-name">Carlos Henrique S.</div>
+            <div class="lead-phone">📞 (48) 99100-2233</div>
+            <div class="lead-tags">
+              <span class="tag tag-quente">🔥 Quente</span>
+              <span class="tag tag-pb">PB</span>
+            </div>
+            <div class="timer">⏱ 18h — vence em 6h</div>
+          </div>
+          <div class="lead-card">
+            <div class="lead-name">Beatriz Ferreira</div>
+            <div class="lead-phone">📞 (48) 99355-9900</div>
+            <div class="lead-tags">
+              <span class="tag tag-morno">~ Morno</span>
+              <span class="tag tag-fln">FLN</span>
+            </div>
+            <div class="timer ok">⏱ 4h</div>
+          </div>
+          <div class="lead-card">
+            <div class="lead-name">Pedro Augusto Lima</div>
+            <div class="lead-phone">📞 (48) 99777-1122</div>
+            <div class="lead-tags">
+              <span class="tag tag-frio">❄ Frio</span>
+              <span class="tag tag-pb">PB</span>
+            </div>
+            <div class="timer ok">⏱ 1h</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Col: 2ª Chamada -->
+      <div class="kanban-col">
+        <div class="col-header">
+          <div class="col-dot" style="background:var(--accent);"></div>
+          <div class="col-name">2ª Chamada</div>
+          <div class="col-count">4</div>
+        </div>
+        <div class="col-cards">
+          <div class="lead-card">
+            <div class="lead-name">Amanda Torres</div>
+            <div class="lead-phone">📞 (48) 99211-4455</div>
+            <div class="lead-tags">
+              <span class="tag tag-morno">~ Morno</span>
+              <span class="tag tag-fln">FLN</span>
+            </div>
+            <div class="timer ok">⏱ 12h</div>
+          </div>
+          <div class="lead-card">
+            <div class="lead-name">Lucas Braga</div>
+            <div class="lead-phone">📞 (48) 99444-6677</div>
+            <div class="lead-tags">
+              <span class="tag tag-quente">🔥 Quente</span>
+              <span class="tag tag-pb">PB</span>
+            </div>
+            <div class="timer ok">⏱ 5h</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Col: Em Atendimento -->
+      <div class="kanban-col">
+        <div class="col-header">
+          <div class="col-dot" style="background:var(--success);"></div>
+          <div class="col-name">Em Atendimento</div>
+          <div class="col-count">7</div>
+        </div>
+        <div class="col-cards">
+          <div class="lead-card">
+            <div class="lead-name">Fernanda Costa</div>
+            <div class="lead-phone">📞 (48) 98800-1199</div>
+            <div class="lead-tags">
+              <span class="tag tag-quente">🔥 Quente</span>
+              <span class="tag tag-pb">PB</span>
+            </div>
+            <div class="timer ok">⏱ 3 dias</div>
+          </div>
+          <div class="lead-card">
+            <div class="lead-name">Rodrigo Mendes</div>
+            <div class="lead-phone">📞 (48) 99620-3344</div>
+            <div class="lead-tags">
+              <span class="tag tag-morno">~ Morno</span>
+              <span class="tag tag-fln">FLN</span>
+            </div>
+            <div class="timer">⏱ 12 dias — redistribuir</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Col: Visita Gerada -->
+      <div class="kanban-col">
+        <div class="col-header">
+          <div class="col-dot" style="background:#4e9e6e;"></div>
+          <div class="col-name">Visita Gerada</div>
+          <div class="col-count">3</div>
+        </div>
+        <div class="col-cards">
+          <div class="lead-card">
+            <div class="lead-name">Camila Ribeiro</div>
+            <div class="lead-phone">📞 (48) 99543-2211</div>
+            <div class="lead-tags">
+              <span class="tag tag-quente">🔥 Quente</span>
+              <span class="tag tag-pb">PB</span>
+            </div>
+            <div class="timer ok">⏱ 2 dias</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Col: Negócio Fechado -->
+      <div class="kanban-col">
+        <div class="col-header">
+          <div class="col-dot" style="background:var(--success);"></div>
+          <div class="col-name">Negócio Fechado</div>
+          <div class="col-count">2</div>
+        </div>
+        <div class="col-cards">
+          <div class="lead-card" style="border-color:#2a3d2a;">
+            <div class="lead-name">Thiago Vasconcelos</div>
+            <div class="lead-phone">📞 (48) 99100-5566</div>
+            <div class="lead-tags">
+              <span class="tag tag-pb">PB</span>
+            </div>
+            <div style="font-size:10px;color:var(--success);margin-top:4px;">✓ Fechado em 01/06/2026</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Col: Descarte -->
+      <div class="kanban-col">
+        <div class="col-header">
+          <div class="col-dot" style="background:var(--danger);"></div>
+          <div class="col-name">Descarte - Sem Perfil</div>
+          <div class="col-count">1</div>
+        </div>
+        <div class="col-cards">
+          <div class="lead-card" style="border-color:#3d1a1a;">
+            <div class="lead-name">Anonimo Teste</div>
+            <div class="lead-phone">📞 (48) 99000-0000</div>
+            <div class="lead-tags">
+              <span class="tag tag-frio">❄ Frio</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /kanban-board -->
+  </div>
+</div>
+
+<!-- LEAD DRAWER -->
+<div id="lead-drawer">
+  <div class="drawer-header">
+    <div>
+      <div class="drawer-title">Mariana Oliveira</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:3px;">Lead desde 01/06/2026 · PB</div>
+    </div>
+    <button class="close-btn" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-body">
+    <div class="field-group">
+      <label>Telefone</label>
+      <div class="field-value">📞 (48) 99821-3344</div>
+    </div>
+    <div class="field-group">
+      <label>Email</label>
+      <div class="field-value">mariana@email.com</div>
+    </div>
+    <div class="field-group">
+      <label>Temperatura</label>
+      <div class="field-value"><span class="tag tag-quente">🔥 Quente</span></div>
+    </div>
+    <div class="field-group">
+      <label>Fonte</label>
+      <div class="field-value">Instagram</div>
+    </div>
+    <div class="field-group">
+      <label>Status</label>
+      <select class="status-select">
+        <option selected>Aguardando Atendimento</option>
+        <option>1ª Chamada</option>
+        <option>Em Atendimento</option>
+        <option>Visita Gerada</option>
+        <option>Negócio Fechado</option>
+        <option>Descarte - Sem Perfil</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <label>Notas</label>
+      <div style="font-size:12px;color:var(--muted);background:var(--surface-raised);padding:10px;border-radius:7px;line-height:1.5;">
+        Interesse em 2 quartos, bairro Pedra Branca. Orçamento até R$600k.
+      </div>
+    </div>
+    <div class="field-group">
+      <label>Histórico</label>
+      <div>
+        <div class="history-item">
+          <div class="history-dot"></div>
+          <div>
+            <div class="history-text">Lead criado — Fonte: Instagram</div>
+            <div class="history-time">03/06/2026 às 14:32</div>
+          </div>
+        </div>
+        <div class="history-item">
+          <div class="history-dot"></div>
+          <div>
+            <div class="history-text">Atribuído via roleta → <b>Fernando S.</b></div>
+            <div class="history-time">03/06/2026 às 14:32</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;">Salvar alterações</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PLANTÕES
+══════════════════════════════════════════ -->
+<div id="page-plantoes" class="page" style="flex-direction:row;">
+  <div id="sidebar" style="width:220px;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:20px 0;flex-shrink:0;">
+    <div class="logo-area"><div class="logo-svg">LA</div><div><div class="logo-text">LACrm</div></div></div>
+    <div class="nav-item" onclick="showPage('pipeline')"><span class="nav-icon">⬡</span> Pipeline</div>
+    <div class="nav-item active"><span class="nav-icon">📅</span> Plantões</div>
+    <div class="nav-item" onclick="showPage('relatorios')"><span class="nav-icon">📈</span> Relatórios</div>
+    <div class="nav-item" onclick="showPage('corretores')"><span class="nav-icon">👥</span> Corretores</div>
+    <div class="nav-item" onclick="showPage('configuracoes')"><span class="nav-icon">⚙️</span> Configurações</div>
+    <div class="sidebar-bottom"><div class="avatar">FS</div><div><div class="user-name">Fernando S.</div><div class="user-role">Admin</div></div></div>
+  </div>
+  <div id="main">
+    <div class="toolbar">
+      <h1>Escala de Plantões</h1>
+      <div style="flex:1"></div>
+      <button class="btn" onclick="showPage('plantoes-review')">📄 Upload PDF</button>
+      <button class="btn btn-primary">＋ Novo Plantão</button>
+    </div>
+    <div class="plantoes-body">
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Semana atual</div>
+          <span class="team-badge team-pb-badge">PB — Pedra Branca</span>
+        </div>
+        <div class="card-body">
+          <div class="shift-row"><div class="shift-date">Seg 02/06</div><div class="shift-name">Ana Paula Silva</div><div class="shift-time">12h→12h</div><span class="slot-badge">A</span></div>
+          <div class="shift-row"><div class="shift-date">Ter 03/06</div><div class="shift-name">Carla Mendonça</div><div class="shift-time">12h→12h</div><span class="slot-badge">A</span></div>
+          <div class="shift-row"><div class="shift-date">Ter 03/06</div><div class="shift-name">Juliana Matos</div><div class="shift-time">12h→12h</div><span class="slot-badge">B</span></div>
+          <div class="shift-row"><div class="shift-date">Qua 04/06</div><div class="shift-name">—</div><div class="shift-time" style="color:var(--danger);">Sem plantão</div></div>
+          <div class="shift-row"><div class="shift-date">Qui 05/06</div><div class="shift-name">Renata Souza</div><div class="shift-time">12h→12h</div><span class="slot-badge">A</span></div>
+          <div class="shift-row"><div class="shift-date">Sex 06/06</div><div class="shift-name">Patrícia Lemos</div><div class="shift-time" style="color:var(--muted);font-size:10px;">Sex-Sáb-Dom</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Semana atual</div>
+          <span class="team-badge team-fln-badge">FLN — Floripa</span>
+        </div>
+        <div class="card-body">
+          <div class="shift-row"><div class="shift-date">Seg 02/06</div><div class="shift-name">Isabela Castro</div><div class="shift-time">00h→00h</div><span class="slot-badge">A</span></div>
+          <div class="shift-row"><div class="shift-date">Ter 03/06</div><div class="shift-name">Daniela Nunes</div><div class="shift-time">00h→00h</div><span class="slot-badge">A</span></div>
+          <div class="shift-row"><div class="shift-date">Qua 04/06</div><div class="shift-name">Bianca Alves</div><div class="shift-time">00h→00h</div><span class="slot-badge">A</span></div>
+          <div class="shift-row"><div class="shift-date">Qui 05/06</div><div class="shift-name">Letícia Prado</div><div class="shift-time">00h→00h</div><span class="slot-badge">A</span></div>
+          <div class="shift-row"><div class="shift-date">Sex 06/06</div><div class="shift-name">Vanessa Rocha</div><div class="shift-time" style="color:var(--muted);font-size:10px;">Sex-Sáb-Dom</div></div>
+        </div>
+      </div>
+
+      <div class="card" style="grid-column:span 2;">
+        <div class="card-header">
+          <div class="card-title">Upload de Escala via PDF</div>
+          <span style="font-size:11px;color:var(--muted);">IA extrai os plantões automaticamente</span>
+        </div>
+        <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div class="upload-area" onclick="showPage('plantoes-review')">
+            <div style="font-size:28px;margin-bottom:8px;">📄</div>
+            <div style="font-weight:600;">Pedra Branca</div>
+            <div style="font-size:11px;margin-top:4px;">Clique para enviar PDF</div>
+          </div>
+          <div class="upload-area" onclick="showPage('plantoes-review')">
+            <div style="font-size:28px;margin-bottom:8px;">📄</div>
+            <div style="font-weight:600;">Floripa</div>
+            <div style="font-size:11px;margin-top:4px;">Clique para enviar PDF</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PLANTÕES — REVISÃO PDF (Feature 8.3)
+══════════════════════════════════════════ -->
+<div id="page-plantoes-review" class="page" style="flex-direction:row;">
+  <div id="sidebar" style="width:220px;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:20px 0;flex-shrink:0;">
+    <div class="logo-area"><div class="logo-svg">LA</div><div><div class="logo-text">LACrm</div></div></div>
+    <div class="nav-item" onclick="showPage('pipeline')"><span class="nav-icon">⬡</span> Pipeline</div>
+    <div class="nav-item active"><span class="nav-icon">📅</span> Plantões</div>
+    <div class="nav-item" onclick="showPage('relatorios')"><span class="nav-icon">📈</span> Relatórios</div>
+    <div class="nav-item" onclick="showPage('corretores')"><span class="nav-icon">👥</span> Corretores</div>
+    <div class="nav-item" onclick="showPage('configuracoes')"><span class="nav-icon">⚙️</span> Configurações</div>
+    <div class="sidebar-bottom"><div class="avatar">FS</div><div><div class="user-name">Fernando S.</div><div class="user-role">Admin</div></div></div>
+  </div>
+  <div id="main">
+    <div class="toolbar">
+      <h1>Revisão — escala_junho_pb.pdf</h1>
+      <span class="team-badge team-pb-badge" style="margin-left:4px;">PB</span>
+      <div style="flex:1"></div>
+      <button class="btn" onclick="showPage('plantoes')">← Voltar</button>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:18px;">
+
+      <!-- Feature 8.3 amber banner -->
+      <div class="unmatched-banner">
+        ⚠ <strong>2 sem corretor mapeado</strong> — serão ignorados na importação
+      </div>
+
+      <!-- Include types -->
+      <div style="display:flex;gap:10px;margin-bottom:14px;align-items:center;">
+        <span style="font-size:12px;color:var(--muted);">Incluir:</span>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;"><input type="checkbox" checked /> LA</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;"><input type="checkbox" checked /> Hurbana</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;"><input type="checkbox" checked /> Gestão</label>
+      </div>
+
+      <div class="card">
+        <table class="review-table">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Corretor (PDF)</th>
+              <th>Horário</th>
+              <th>Tipo</th>
+              <th>Slot</th>
+              <th>Mapeado para</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>02/06/2026</td>
+              <td>Ana Paula Silva</td>
+              <td>12:00 → 12:00</td>
+              <td>LA</td>
+              <td><span class="slot-badge">A</span></td>
+              <td><select class="status-select" style="width:auto;padding:4px 8px;font-size:11px;"><option>Ana Paula Silva</option></select></td>
+            </tr>
+            <tr>
+              <td>03/06/2026</td>
+              <td>Carla / Juliana</td>
+              <td>12:00 → 12:00</td>
+              <td>LA</td>
+              <td><span class="slot-badge">A</span></td>
+              <td><select class="status-select" style="width:auto;padding:4px 8px;font-size:11px;"><option>Carla Mendonça</option></select></td>
+            </tr>
+            <tr>
+              <td>03/06/2026</td>
+              <td>Carla / Juliana</td>
+              <td>12:00 → 12:00</td>
+              <td>LA</td>
+              <td><span class="slot-badge">B</span></td>
+              <td><select class="status-select" style="width:auto;padding:4px 8px;font-size:11px;"><option>Juliana Matos</option></select></td>
+            </tr>
+            <!-- Feature 8.3 amber row — unmatched -->
+            <tr class="review-row-amber">
+              <td>04/06/2026</td>
+              <td style="color:var(--warning);">M. Conceição</td>
+              <td>12:00 → 12:00</td>
+              <td>LA</td>
+              <td><span class="slot-badge">A</span></td>
+              <td><select class="select-amber"><option value="">⚠ Mapear manualmente…</option><option>Ana Paula Silva</option><option>Carla Mendonça</option><option>Juliana Matos</option></select></td>
+            </tr>
+            <tr>
+              <td>05/06/2026</td>
+              <td>Renata Souza</td>
+              <td>12:00 → 12:00</td>
+              <td>LA</td>
+              <td><span class="slot-badge">A</span></td>
+              <td><select class="status-select" style="width:auto;padding:4px 8px;font-size:11px;"><option>Renata Souza</option></select></td>
+            </tr>
+            <!-- Feature 8.3 amber row — unmatched -->
+            <tr class="review-row-amber">
+              <td>06/06/2026</td>
+              <td style="color:var(--warning);">Gestão FLN</td>
+              <td>00:00 → 23:59</td>
+              <td>Gestão</td>
+              <td>—</td>
+              <td><select class="select-amber"><option value="">⚠ Mapear manualmente…</option><option>Isabela Castro</option><option>Daniela Nunes</option></select></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:14px;">
+        <button class="btn" onclick="showPage('plantoes')">Cancelar</button>
+        <button class="btn btn-primary" onclick="showPage('plantoes')">✓ Confirmar e importar (4 registros)</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     RELATÓRIOS
+══════════════════════════════════════════ -->
+<div id="page-relatorios" class="page" style="flex-direction:row;">
+  <div id="sidebar" style="width:220px;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:20px 0;flex-shrink:0;">
+    <div class="logo-area"><div class="logo-svg">LA</div><div><div class="logo-text">LACrm</div></div></div>
+    <div class="nav-item" onclick="showPage('pipeline')"><span class="nav-icon">⬡</span> Pipeline</div>
+    <div class="nav-item" onclick="showPage('plantoes')"><span class="nav-icon">📅</span> Plantões</div>
+    <div class="nav-item active"><span class="nav-icon">📈</span> Relatórios</div>
+    <div class="nav-item" onclick="showPage('corretores')"><span class="nav-icon">👥</span> Corretores</div>
+    <div class="nav-item" onclick="showPage('configuracoes')"><span class="nav-icon">⚙️</span> Configurações</div>
+    <div class="sidebar-bottom"><div class="avatar">FS</div><div><div class="user-name">Fernando S.</div><div class="user-role">Admin</div></div></div>
+  </div>
+  <div id="main">
+    <div class="toolbar">
+      <h1>Relatórios — Junho 2026</h1>
+      <div style="flex:1"></div>
+      <button class="btn">← Maio</button>
+      <button class="btn">Junho →</button>
+      <button class="btn btn-primary">📸 Gerar Snapshot</button>
+    </div>
+    <div class="relatorios-body">
+
+      <div class="week-tabs">
+        <div class="week-tab active">Semana 1 (1–7)</div>
+        <div class="week-tab">Semana 2 (8–14)</div>
+        <div class="week-tab">Semana 3 (15–21)</div>
+        <div class="week-tab">Semana 4 (22–28)</div>
+        <div class="week-tab">Semana 5 (29–30)</div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" style="color:var(--foreground);">47</div>
+          <div class="stat-label">Novos leads</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" style="color:var(--success);">6</div>
+          <div class="stat-label">Visitas geradas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" style="color:var(--accent);">2</div>
+          <div class="stat-label">Negócios fechados</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" style="color:var(--danger);">9</div>
+          <div class="stat-label">Descartes</div>
+        </div>
+      </div>
+
+      <div class="funnel">
+        <div style="font-size:13px;font-weight:700;margin-bottom:14px;">Funil por equipe — Semana 1</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--team-pb);margin-bottom:10px;">● Pedra Branca</div>
+            <div class="funnel-row"><div class="funnel-label">Novos</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:100%;background:#3d2e00;color:var(--team-pb);">28</div></div></div>
+            <div class="funnel-row"><div class="funnel-label">Em Atendimento</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:64%;background:rgba(92,184,122,.15);color:var(--success);">18</div></div></div>
+            <div class="funnel-row"><div class="funnel-label">Visita Gerada</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:25%;background:rgba(92,184,122,.25);color:var(--success);">7</div></div></div>
+            <div class="funnel-row"><div class="funnel-label">Fechados</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:7%;background:rgba(92,184,122,.4);color:var(--success);">2</div></div></div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--team-fln);margin-bottom:10px;">● Floripa</div>
+            <div class="funnel-row"><div class="funnel-label">Novos</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:68%;background:#0d2e18;color:var(--team-fln);">19</div></div></div>
+            <div class="funnel-row"><div class="funnel-label">Em Atendimento</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:46%;background:rgba(92,184,122,.15);color:var(--success);">13</div></div></div>
+            <div class="funnel-row"><div class="funnel-label">Visita Gerada</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:18%;background:rgba(92,184,122,.25);color:var(--success);">5</div></div></div>
+            <div class="funnel-row"><div class="funnel-label">Fechados</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:4%;background:rgba(92,184,122,.4);color:var(--success);">1</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Snapshots -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Snapshots Salvos</div>
+          <span style="font-size:11px;color:var(--muted);">Histórico de relatórios</span>
+        </div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:0;">
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);">
+            <span style="font-size:13px;flex:1;">Semana 4 — Maio 2026 · PB</span>
+            <span style="font-size:11px;color:var(--muted);">28/05/2026</span>
+            <button class="btn" style="padding:4px 10px;font-size:11px;">📄 Ver PDF</button>
+            <button class="btn" style="padding:4px 10px;font-size:11px;color:var(--danger);">🗑</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 0;">
+            <span style="font-size:13px;flex:1;">Semana 4 — Maio 2026 · FLN</span>
+            <span style="font-size:11px;color:var(--muted);">28/05/2026</span>
+            <button class="btn" style="padding:4px 10px;font-size:11px;">📄 Ver PDF</button>
+            <button class="btn" style="padding:4px 10px;font-size:11px;color:var(--danger);">🗑</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CORRETORES
+══════════════════════════════════════════ -->
+<div id="page-corretores" class="page" style="flex-direction:row;">
+  <div id="sidebar" style="width:220px;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:20px 0;flex-shrink:0;">
+    <div class="logo-area"><div class="logo-svg">LA</div><div><div class="logo-text">LACrm</div></div></div>
+    <div class="nav-item" onclick="showPage('pipeline')"><span class="nav-icon">⬡</span> Pipeline</div>
+    <div class="nav-item" onclick="showPage('plantoes')"><span class="nav-icon">📅</span> Plantões</div>
+    <div class="nav-item" onclick="showPage('relatorios')"><span class="nav-icon">📈</span> Relatórios</div>
+    <div class="nav-item active"><span class="nav-icon">👥</span> Corretores</div>
+    <div class="nav-item" onclick="showPage('configuracoes')"><span class="nav-icon">⚙️</span> Configurações</div>
+    <div class="sidebar-bottom"><div class="avatar">FS</div><div><div class="user-name">Fernando S.</div><div class="user-role">Admin</div></div></div>
+  </div>
+  <div id="main">
+    <div class="toolbar">
+      <h1>Corretores</h1>
+      <div style="flex:1"></div>
+      <input class="input-field" placeholder="🔍 Buscar corretor…" style="width:200px;" />
+      <div class="filter-chip active">Todos</div>
+      <div class="filter-chip" style="color:var(--team-pb);border-color:var(--team-pb);">PB</div>
+      <div class="filter-chip" style="color:var(--team-fln);border-color:var(--team-fln);">FLN</div>
+      <button class="btn btn-primary">＋ Adicionar</button>
+    </div>
+    <div class="corretores-body">
+      <table class="corretor-table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Equipe</th>
+            <th>Papel</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar" style="width:28px;height:28px;font-size:10px;background:var(--accent);">FS</div>Fernando Severo</div></td>
+            <td style="color:var(--muted);">fernando@la.com.br</td>
+            <td><span class="team-badge team-pb-badge">PB</span></td>
+            <td><span class="role-badge role-admin">Admin</span></td>
+            <td><span class="status-dot dot-active"></span>Ativo</td>
+            <td><button class="btn" style="padding:4px 10px;font-size:11px;">Editar</button></td>
+          </tr>
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar" style="width:28px;height:28px;font-size:10px;background:#3d5a8a;">AP</div>Ana Paula Silva</div></td>
+            <td style="color:var(--muted);">ana.paula@la.com.br</td>
+            <td><span class="team-badge team-pb-badge">PB</span></td>
+            <td><span class="role-badge role-corretor">Corretor</span></td>
+            <td><span class="status-dot dot-active"></span>Ativo</td>
+            <td><button class="btn" style="padding:4px 10px;font-size:11px;">Editar</button></td>
+          </tr>
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar" style="width:28px;height:28px;font-size:10px;background:#2e3d8a;">IC</div>Isabela Castro</div></td>
+            <td style="color:var(--muted);">isabela@la.com.br</td>
+            <td><span class="team-badge team-fln-badge">FLN</span></td>
+            <td><span class="role-badge role-corretor">Corretor</span></td>
+            <td><span class="status-dot dot-active"></span>Ativo</td>
+            <td><button class="btn" style="padding:4px 10px;font-size:11px;">Editar</button></td>
+          </tr>
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar" style="width:28px;height:28px;font-size:10px;background:#2e5a3d;">CM</div>Carla Mendonça</div></td>
+            <td style="color:var(--muted);">carla@la.com.br</td>
+            <td><span class="team-badge team-pb-badge">PB</span></td>
+            <td><span class="role-badge role-gestor">Gestor</span></td>
+            <td><span class="status-dot dot-active"></span>Ativo</td>
+            <td><button class="btn" style="padding:4px 10px;font-size:11px;">Editar</button></td>
+          </tr>
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar" style="width:28px;height:28px;font-size:10px;background:#4a2e2e;">LP</div>Lucas Pereira</div></td>
+            <td style="color:var(--muted);">lucas@la.com.br</td>
+            <td><span class="team-badge team-fln-badge">FLN</span></td>
+            <td><span class="role-badge role-corretor">Corretor</span></td>
+            <td><span class="status-dot dot-inactive"></span>Inativo</td>
+            <td><button class="btn" style="padding:4px 10px;font-size:11px;">Editar</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CONFIGURAÇÕES
+══════════════════════════════════════════ -->
+<div id="page-configuracoes" class="page" style="flex-direction:row;">
+  <div id="sidebar" style="width:220px;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:20px 0;flex-shrink:0;">
+    <div class="logo-area"><div class="logo-svg">LA</div><div><div class="logo-text">LACrm</div></div></div>
+    <div class="nav-item" onclick="showPage('pipeline')"><span class="nav-icon">⬡</span> Pipeline</div>
+    <div class="nav-item" onclick="showPage('plantoes')"><span class="nav-icon">📅</span> Plantões</div>
+    <div class="nav-item" onclick="showPage('relatorios')"><span class="nav-icon">📈</span> Relatórios</div>
+    <div class="nav-item" onclick="showPage('corretores')"><span class="nav-icon">👥</span> Corretores</div>
+    <div class="nav-item active"><span class="nav-icon">⚙️</span> Configurações</div>
+    <div class="sidebar-bottom"><div class="avatar">FS</div><div><div class="user-name">Fernando S.</div><div class="user-role">Admin</div></div></div>
+  </div>
+  <div id="main">
+    <div class="toolbar"><h1>Configurações</h1></div>
+    <div style="flex:1;overflow-y:auto;padding:18px;">
+    <div class="config-body">
+
+      <div class="config-section">
+        <div class="config-section-header">Pipeline</div>
+        <div class="config-row">
+          <div>
+            <div class="config-label">Roleta ativa</div>
+            <div class="config-desc">Distribuição automática de leads ao plantonista</div>
+          </div>
+          <div class="toggle"></div>
+        </div>
+        <div class="config-row">
+          <div>
+            <div class="config-label">Cron Secret</div>
+            <div class="config-desc">Header x-cron-secret obrigatório no endpoint /escalate-leads</div>
+          </div>
+          <input class="input-field" type="password" value="••••••••••••••••" />
+        </div>
+      </div>
+
+      <div class="config-section">
+        <div class="config-section-header">Integração Vista / Loft</div>
+        <div class="config-row">
+          <div>
+            <div class="config-label">Vista Sync ativo</div>
+            <div class="config-desc">Sincroniza leads do Vista CRM automaticamente</div>
+          </div>
+          <div class="toggle toggle-off"></div>
+        </div>
+        <div class="config-row">
+          <div>
+            <div class="config-label">API Key Vista</div>
+          </div>
+          <input class="input-field" placeholder="vk_live_••••••••" />
+        </div>
+        <div class="config-row">
+          <div></div>
+          <button class="btn btn-accent">🔌 Testar conexão</button>
+        </div>
+      </div>
+
+      <div class="config-section">
+        <div class="config-section-header">Google Sheets</div>
+        <div class="config-row">
+          <div>
+            <div class="config-label">Sheet ID</div>
+            <div class="config-desc">Planilha de sincronização de leads</div>
+          </div>
+          <input class="input-field" placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms" />
+        </div>
+      </div>
+
+    </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t => {
+    if (t.textContent.toLowerCase().includes(id.replace('-review','').replace('-',' '))) t.classList.add('active');
+  });
+}
+
+function openDrawer() {
+  document.getElementById('lead-drawer').classList.add('open');
+}
+function closeDrawer() {
+  document.getElementById('lead-drawer').classList.remove('open');
+}
+</script>
+</body>
+</html>
